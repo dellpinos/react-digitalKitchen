@@ -1,21 +1,32 @@
 import Categoria from '../components/Categoria';
-import {categorias} from '../data/categorias';
+import { categorias } from '../data/categorias';
 export default function Sidebar() {
     return (
         <aside className="md:w-72">
-            <div className="p-4">
-                <img  
-                    className="w-40"
+            <div className=" flex flex-col justify-center items-center">
+                <img
+                    className=" w-50"
                     src="img/logo.png"
+                    alt='Imagen Logo'
                 />
             </div>
 
-            <div className='mt-10'>
-                {categorias.map( categoria => (
+            <div className='mt-6'>
+                {categorias.map(categoria => (
                     <Categoria
                         categoria={categoria}
+                        key={categoria.id}
                     />
                 ))}
+            </div>
+            <div className='my-5 px-5'>
+                <button
+                    type='button'
+                    className='text-center bg-red-500 w-full p-3 font-bold text-white truncate hover:bg-red-600'
+                >
+                    Cancelar Orden
+                </button>
+
             </div>
 
 

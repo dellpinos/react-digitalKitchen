@@ -1,6 +1,10 @@
 import { productos } from '../data/productos';
 import Producto from '../components/Producto';
+import useKitchen from '../hooks/useKitchen';
+
+
 export default function Inicio() {
+
 
     return (
         <>

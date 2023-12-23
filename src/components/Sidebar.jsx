@@ -1,6 +1,11 @@
+import useKitchen from '../hooks/useKitchen';
 import Categoria from '../components/Categoria';
-import { categorias } from '../data/categorias';
+
 export default function Sidebar() {
+
+    const { categorias } = useKitchen();
+
+
     return (
         <aside className="md:w-72">
             <div className=" flex flex-col justify-center items-center">

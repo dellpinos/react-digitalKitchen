@@ -2,12 +2,12 @@ import useKitchen from "../hooks/useKitchen";
 
 export default function Categoria({ categoria }) {
 
-    const { handleClickCategoria } = useKitchen();
+    const { handleClickCategoria, categoriaActual } = useKitchen();
     const { icono, id, nombre } = categoria;
 
 
     return (
-        <button className=" flex items-center gap-4 border w-full p-3 hover:bg-amber-400 cursor-pointer"
+        <button className={ `${categoriaActual.id === id ? "bg-amber-400" : "bg-white"} flex items-center gap-4 border w-full p-3 hover:bg-amber-400 cursor-pointer`}
             type="button"
             onClick={() => handleClickCategoria(id)}
         >

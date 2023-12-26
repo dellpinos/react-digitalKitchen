@@ -1,4 +1,4 @@
-import { productos } from '../data/productos';
+import { productos as data } from '../data/productos';
 import Producto from '../components/Producto';
 import useKitchen from '../hooks/useKitchen';
 
@@ -6,6 +6,8 @@ import useKitchen from '../hooks/useKitchen';
 export default function Inicio() {
 
     const { categoriaActual } = useKitchen(); 
+
+    const productos = data.filter( producto => producto.categoria_id === categoriaActual.id);
 
     return (
         <>

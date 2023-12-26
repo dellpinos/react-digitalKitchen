@@ -9,6 +9,7 @@ const KitchenProvider = ({children}) => {
     const [categoriaActual, setCategoriaActual] = useState(categorias[0]);
     const [modal, setModal] = useState(false);
     const [producto, setProducto] = useState({});
+    const [pedido, setPedido] = useState([]);
     
     const handleClickCategoria = id => {
         const categoria = categorias.filter( cat => cat.id === id)[0];
@@ -22,6 +23,10 @@ const KitchenProvider = ({children}) => {
     const handleSetProducto = producto => {
         setProducto(producto);
     }
+
+    const handleAgregarPedido = ({categoria_id, imagen, ...producto}) => {
+        setPedido([...pedido, producto]);
+    }
     
     return (
         <KitchenContext.Provider
@@ -33,7 +38,9 @@ const KitchenProvider = ({children}) => {
             modal,
             handleClickModal,
             producto,
-            handleSetProducto
+            handleSetProducto,
+            pedido,
+            handleAgregarPedido
             }}
         >{children}</KitchenContext.Provider>
     )

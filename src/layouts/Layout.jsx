@@ -1,7 +1,9 @@
 import { Outlet } from 'react-router-dom';
 import Modal from 'react-modal';
-import Sidebar from '../components/sidebar';
-import Resumen from '../components/resumen';
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+import Sidebar from '../components/Sidebar';
+import Resumen from '../components/Resumen';
 import ModalProducto from '../components/ModalProducto';
 import useKitchen from '../hooks/useKitchen';
 
@@ -20,7 +22,7 @@ Modal.setAppElement('#root');
 
 export default function Layout() {
 
-    const { modal, handleClickModal } = useKitchen();
+    const { modal } = useKitchen();
 
     return (
         <>
@@ -40,7 +42,7 @@ export default function Layout() {
             <Modal isOpen={modal} style={customStyles}>
                 <ModalProducto/>
             </Modal>
-
+            <ToastContainer/>
         </>
 
     )

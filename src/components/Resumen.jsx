@@ -1,4 +1,5 @@
 import useKitchen from "../hooks/useKitchen"
+import ResumenProducto from "./ResumenProducto";
 
 export default function Resumen() {
 
@@ -14,7 +15,12 @@ export default function Resumen() {
                 {pedido.length === 0 ? (
                     <p className="text-center text-2xl">No elementos en tu pedido</p>
                 ) : (
-                    <p>Hay contenido</p>
+                    pedido.map(producto => (
+                        <ResumenProducto
+                            key={producto.id}
+                            producto={producto}
+                        />
+                    ))
                 )}
             </div>
 
@@ -22,10 +28,10 @@ export default function Resumen() {
 
             <form className="w-full">
                 <div className="mt-5">
-                    <input 
-                    type="submit" 
-                    className="bg-indigo-600 hover:bg-indigo-800 px-5 py-2 rounded uppercase font-bold text-white text-center w-full cursor-pointer"
-                    value="Confirmar"
+                    <input
+                        type="submit"
+                        className="bg-indigo-600 hover:bg-indigo-800 px-5 py-2 rounded uppercase font-bold text-white text-center w-full cursor-pointer"
+                        value="Confirmar"
                     />
                 </div>
             </form>

@@ -1,12 +1,21 @@
 import useKitchen from "../hooks/useKitchen";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { formatearDinero } from "../helpers"
 
 
 export default function ModalProducto() {
 
-    const { producto, handleClickModal, handleAgregarPedido } = useKitchen();
+    const { producto, handleClickModal, handleAgregarPedido, pedido } = useKitchen();
     const [cantidad, setCantidad] = useState(1);
+    const [edicion, setEdicion] = useState(false);
+
+    useEffect(() => {
+        if (pedido.some(pedidoState => pedidoState.id === producto.id)) {
+            const productoEdicion = pedido.filter(pedidoState => pedidoState.id === producto.id)[0];
+            setCantidad(productoEdicion.cantidad);
+            setEdicion(true);
+        }
+    }, [pedido]);
 
     return (
 
@@ -61,9 +70,12 @@ export default function ModalProducto() {
                 <button
                     type="button"
                     className="bg-indigo-600 hover:bg-indigo-800 px-5 py-2 mt-5 text-white font-bold uppercase rounded"
-                    onClick={() => handleAgregarPedido({...producto, cantidad})}
+                    onClick={() => {
+                        handleAgregarPedido({ ...producto, cantidad });
+                        handleClickModal();
+                    }}
                 >
-                    Agregar al pedido
+                    {edicion ? 'Guardar Cambios' : 'Agregar al Pedido'}
                 </button>
             </div>
 

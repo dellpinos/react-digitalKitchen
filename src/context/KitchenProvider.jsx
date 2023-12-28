@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { categorias as categoriasDB } from '../data/categorias';
 
@@ -11,6 +11,12 @@ const KitchenProvider = ({ children }) => {
     const [modal, setModal] = useState(false);
     const [producto, setProducto] = useState({});
     const [pedido, setPedido] = useState([]);
+    const [total, setTotal] = useState(0);
+
+    useEffect(() => {
+        const nuevoTotal = pedido.reduce( (totalyy, productoyy) => (productoyy.precio * productoyy.cantidad) + totalyy, 0 );
+        setTotal(nuevoTotal);
+    }, [pedido]);
 
     const handleClickCategoria = id => {
         const categoria = categorias.filter(cat => cat.id === id)[0];
@@ -25,7 +31,7 @@ const KitchenProvider = ({ children }) => {
         setProducto(producto);
     }
 
-    const handleAgregarPedido = ({ categoria_id, imagen, ...producto }) => { // elimino elementos innecesarios del objeto
+    const handleAgregarPedido = ({ categoria_id, ...producto }) => { // elimino elementos innecesarios del objeto
 
         if (pedido.some(pedidoState => pedidoState.id === producto.id)) {
             const pedidoActualizado = pedido.map(pedidoState => pedidoState.id === producto.id ? producto : pedidoState);
@@ -36,6 +42,18 @@ const KitchenProvider = ({ children }) => {
             setPedido([...pedido, producto]); // agrego objeto al array
             toast.success('Agregado Correctamente!');
         }
+    }
+
+    const handleEditarCantidad = id => {
+        const productoActualizar = pedido.filter( producto => producto.id === id)[0];
+        setProducto(productoActualizar);
+        setModal(!modal);
+    }
+
+    const handleEliminarProductoPedido = id => {
+        const pedidoActualizado = pedido.filter( producto => producto.id !== id);
+        setPedido(pedidoActualizado);
+        toast.success('Producto Eliminado');
     }
 
     return (
@@ -50,7 +68,10 @@ const KitchenProvider = ({ children }) => {
                 producto,
                 handleSetProducto,
                 pedido,
-                handleAgregarPedido
+                handleAgregarPedido,
+                handleEditarCantidad,
+                handleEliminarProductoPedido,
+                total
             }}
         >{children}</KitchenContext.Provider>
     )

@@ -1,9 +1,11 @@
 import useKitchen from "../hooks/useKitchen"
 import ResumenProducto from "./ResumenProducto";
+import { formatearDinero } from "../helpers"
 
 export default function Resumen() {
 
-    const { pedido } = useKitchen();
+    const { pedido, total } = useKitchen();
+    const comprobarPedido = () => pedido.length === 0;
 
 
     return (
@@ -24,14 +26,15 @@ export default function Resumen() {
                 )}
             </div>
 
-            <p className="text-xl mt-10">Total: {''}</p>
+            <p className="text-xl mt-10">Total: {formatearDinero(total)}</p>
 
             <form className="w-full">
                 <div className="mt-5">
                     <input
                         type="submit"
-                        className="bg-indigo-600 hover:bg-indigo-800 px-5 py-2 rounded uppercase font-bold text-white text-center w-full cursor-pointer"
+                        className={`${comprobarPedido() ? 'bg-indigo-100 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-800'}  px-5 py-2 rounded uppercase font-bold text-white text-center w-full cursor-pointer`}
                         value="Confirmar"
+                        disabled={comprobarPedido()}
                     />
                 </div>
             </form>

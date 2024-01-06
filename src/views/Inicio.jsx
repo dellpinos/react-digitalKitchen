@@ -1,11 +1,30 @@
-import { productos as data } from '../data/productos';
+import useSWR from 'swr';
 import Producto from '../components/Producto';
+import clienteAxios from '../config/axios';
 import useKitchen from '../hooks/useKitchen';
 
 
 export default function Inicio() {
 
-    const { categoriaActual } = useKitchen(); 
+    const { categoriaActual } = useKitchen();
+
+    // const fetcher = () => clienteAxios('/api/productos').then(data => data.data);
+
+    const fetcher = async() => {
+        try {
+            const resultado = await clienteAxios('/api/productos');
+            return resultado.data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // Consulta SWR
+    const { data, error, isLoading } = useSWR('/api/productos', fetcher);
+
+
+    if(isLoading) return "One moment, please...";
+
 
     const productos = data.filter( producto => producto.categoria_id === categoriaActual.id);
 

@@ -1,5 +1,35 @@
+import { createRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import clienteAxios from '../config/axios';
+import Alerta from '../components/Alerta';
+
+
 export default function Login() {
+
+    const emailRef = createRef();
+    const passwordRef = createRef();
+
+    const [errores, setErrores] = useState([]);
+
+    const handleSumbit = async e => {
+        e.preventDefault();
+
+        const datos = {
+            email: emailRef.current.value,
+            password: passwordRef.current.value
+        }
+
+        try {
+            const {data} = await clienteAxios.post('/api/login', datos);
+            localStorage.setItem('AUTH_TOKEN', data.token);
+            setErrores([]);
+        } catch (error) {
+            console.log(error);
+            setErrores(Object.values(error.response.data.errors));
+        }
+    }
+
+
     return (
         <>
 
@@ -7,18 +37,22 @@ export default function Login() {
             <p>Para crear un pedido debes iniciar sesión.</p>
 
             <div className=" bg-white shadow-md rounded-md mt-10 px-5 py-10">
-                <form >
+                <form onSubmit={handleSumbit}>
+
+                { errores ? errores.map( (error, i) => <Alerta key={i}>{error}</Alerta>) : null }
+
                     <div className=" mb-4">
                         <label
                             className="text-slate-800"
-                            htmlFor="name"
+                            htmlFor="email"
                         >Email:</label>
                         <input
-                            type="text"
+                            type="email"
                             id="email"
                             className=" mt-2 w-full p-3 bg-gray-50"
-                            name="name"
+                            name="email"
                             placeholder="correo@correo.com"
+                            ref={emailRef}
                         />
                     </div>
                     <div className=" mb-4">
@@ -27,11 +61,12 @@ export default function Login() {
                             htmlFor="password"
                         >Password:</label>
                         <input
-                            type="text"
-                            id="email"
+                            type="password"
+                            id="password"
                             className=" mt-2 w-full p-3 bg-gray-50"
                             name="password"
                             placeholder="Tu password"
+                            ref={passwordRef}
                         />
                     </div>
 

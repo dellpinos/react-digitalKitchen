@@ -6,6 +6,7 @@ import Sidebar from '../components/Sidebar';
 import Resumen from '../components/Resumen';
 import ModalProducto from '../components/ModalProducto';
 import useKitchen from '../hooks/useKitchen';
+import { useAuth } from '../hooks/useAuth';
 
 const customStyles = {
     content: {
@@ -23,6 +24,7 @@ Modal.setAppElement('#root');
 export default function Layout() {
 
     const { modal } = useKitchen();
+    const { user, error } = useAuth({middleware: 'auth'});
 
     return (
         <>

@@ -14,15 +14,19 @@ const KitchenProvider = ({ children }) => {
     const [total, setTotal] = useState(0);
 
     useEffect(() => {
-        const nuevoTotal = pedido.reduce( (totalN, productoN) => (productoN.precio * productoN.cantidad) + totalN, 0 );
+        const nuevoTotal = pedido.reduce((totalN, productoN) => (productoN.precio * productoN.cantidad) + totalN, 0);
         setTotal(nuevoTotal);
     }, [pedido]);
 
-    const obtenerCategorias  = async () => {
+    const obtenerCategorias = async () => {
         try {
-            const {data} = await clienteAxios('/api/categorias/');
+            const { data } = await clienteAxios('/api/categorias/');
             setCategorias(data.data);
             setCategoriaActual(data.data[0]);
+
+            // Cerrar sesión
+
+
         } catch (error) {
             console.log(error);
         }
@@ -59,15 +63,46 @@ const KitchenProvider = ({ children }) => {
     }
 
     const handleEditarCantidad = id => {
-        const productoActualizar = pedido.filter( producto => producto.id === id)[0];
+        const productoActualizar = pedido.filter(producto => producto.id === id)[0];
         setProducto(productoActualizar);
         setModal(!modal);
     }
 
     const handleEliminarProductoPedido = id => {
-        const pedidoActualizado = pedido.filter( producto => producto.id !== id);
+        const pedidoActualizado = pedido.filter(producto => producto.id !== id);
         setPedido(pedidoActualizado);
         toast.success('Producto Eliminado');
+    }
+
+    const handleSubmitNuevaOrden = async (logout) => {
+
+        const token = localStorage.getItem('AUTH_TOKEN');
+
+        try {
+            const { data } = await clienteAxios.post('/api/pedidos', {
+                total,
+                productos: pedido.map(producto => {
+                    return {
+                        id: producto.id,
+                        cantidad: producto.cantidad
+                    }
+                })
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            toast.success(data.message);
+            setTimeout(() => {
+                setPedido([])
+            }, 1000);
+            setTimeout(() => {
+                localStorage.removeItem('AUTH_TOKEN');
+                logout();
+            }, 3000);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
@@ -85,7 +120,8 @@ const KitchenProvider = ({ children }) => {
                 handleAgregarPedido,
                 handleEditarCantidad,
                 handleEliminarProductoPedido,
-                total
+                total,
+                handleSubmitNuevaOrden
             }}
         >{children}</KitchenContext.Provider>
     )

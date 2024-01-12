@@ -14,7 +14,7 @@ export default function Sidebar() {
             <div className=" flex flex-col justify-center items-center">
                 <img
                     className=" w-50"
-                    src="img/logo.png"
+                    src="/img/logo.png"
                     alt='Imagen Logo'
                 />
             </div>

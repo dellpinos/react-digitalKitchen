@@ -11,8 +11,13 @@ export default function Inicio() {
     // const fetcher = () => clienteAxios('/api/productos').then(data => data.data);
 
     const fetcher = async() => {
+        const token = localStorage.getItem('AUTH_TOKEN');
         try {
-            const resultado = await clienteAxios('/api/productos');
+            const resultado = await clienteAxios('/api/productos', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             return resultado.data.data;
         } catch (error) {
             console.log(error);
@@ -38,6 +43,7 @@ export default function Inicio() {
             <div className='grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3'>
                 {productos.map(producto => (
                     <Producto
+                        botonAgregar={true}
                         key={producto.imagen}
                         producto={producto}
                     />

@@ -24,7 +24,7 @@ Modal.setAppElement('#root');
 export default function Layout() {
 
     const { modal } = useKitchen();
-    const { user, error } = useAuth({middleware: 'auth'});
+    useAuth({middleware: 'auth'});
 
     return (
         <>
